@@ -12,7 +12,7 @@ avg_data = data.frame()
 count_files = 0 
 
 main_subjects = list.dirs('.', recursive = F); #main folders
-for (i in len(main_subjects)) {
+for (i in 1:length(main_subjects)) {
   ext1 = main_subjects[i]
   main_path = paste(getwd(), substr(ext1, 2, nchar(ext1)), sep = "")
   setwd(main_path)
