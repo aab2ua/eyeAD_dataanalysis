@@ -31,7 +31,11 @@ for (i in 1:length(main_subjects)) {
                             width_mm = screen[2,2], width_px = screen[3,2], height_px = screen[4,2], method = "gazepath",
                             samplerate = 1000, thres_dur = 80)
         s_gaze = summary(alg_results_gaze)
-
+      
+        if (s_gaze == "There were no fixations or saccades classified, probably data quality of this particpant is very low") { #exclude poor quality data
+        next
+        }
+      
         #Getting fixation metrics:
         fix_filtered = s_gaze%>%
           filter(Value == "f")
