@@ -24,7 +24,6 @@ for (k in 43) {
   main_path = "/Volumes/EyeTrackUAV2/RAW_DATA/RAW_DATA_EyeTracker_CoordSystem"
   setwd(main_path)
   event_folders = list.dirs('.', recursive = F); #event (43) folders
-  event_folders = event_folders[2:length(event_folders)]
   for (i in 1:length(event_folders)) {
     ext1 = event_folders[i]
     event_path = paste(getwd(), substr(ext1, 2, nchar(ext1)), sep = "")
@@ -74,7 +73,6 @@ for (k in 43) {
         #Get to the right folder of 30 csvs
         setwd("/Volumes/EyeTrackUAV2/FIXATIONS")
         event_folders_fix = list.dirs('.', recursive = F); #event (43) folders
-        event_folders_fix = event_folders_fix[2:length(event_folders_fix)]
         ext_fix1 = event_folders_fix[i]
         ext_fix1 = substr(ext_fix1, 2, nchar(ext_fix1))
         ext_fix2 = paste(ext_fix1,"_FV", sep = "")
@@ -92,7 +90,6 @@ for (k in 43) {
         #Get to the right folder of 30 csvs
         setwd("/Volumes/EyeTrackUAV2/SACCADES")
         event_folders_sac = list.dirs('.', recursive = F); #event (43) folders
-        event_folders_sac = event_folders_sac[2:length(event_folders_sac)]
         ext_sac1 = event_folders_sac[i]
         ext_sac1 = substr(ext_sac1, 2, nchar(ext_sac1))
         ext_sac2 = paste(ext_sac1,"_FV", sep = "")
