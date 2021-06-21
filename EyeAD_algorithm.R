@@ -114,12 +114,12 @@ for (k in 43) {
         names(SD_event_data) = c("SD fixation count", "SD fixation duration", "SD saccade count", "SD saccade duration") 
       }
       
-    for (i in 4) {
+    for (i in 1:4) {
       RMSE_value = RMSE(SD_event_data, i)
       RMSE_values = c(RMSE_values, RMSE_value)
     }
   
-    RMSE_data = rbind(RMSE_values)
+    RMSE_data = rbind(RMSE_data, RMSE_values)
     }
     
     SD_event_data = data.frame()
@@ -134,15 +134,17 @@ for (k in 43) {
 }
   
 
-ground_truth = ground_truth%>%
-  rename(
-    name = paste.ext1.,
-    fix_count = mean.avg_data.fix_count.,
-    fix_duration = mean.avg_data.fix_dur_avg.,
-    sac_count = mean.avg_data.sac_count.,
-    sac_duration = mean.avg_data.sac_dur_avg.
-  )%>%
-  arrange(name)
+#ground_truth = ground_truth%>%
+#  rename(
+#    name = paste.ext1.,
+#    fix_count = mean.avg_data.fix_count.,
+#    fix_duration = mean.avg_data.fix_dur_avg.,
+#    sac_count = mean.avg_data.sac_count.,
+#    sac_duration = mean.avg_data.sac_dur_avg.
+#  )%>%
+#  arrange(name)
 
-write.csv(ground_truth,"/Users/aartheebaskaran/Desktop/RMASE.csv", row.names = FALSE) #change this to your where you want to output the csv with the same title
+names(RMSE_data) <- c("Filename", "RMSE fixation count", "RMSE fixation duration", "RMSE saccade count", "RMSE saccade duration") 
+
+write.csv(RMSE_data,"/Users/aartheebaskaran/Desktop/RMASE.csv", row.names = FALSE) #change this to your where you want to output the csv with the same title
 
