@@ -24,6 +24,7 @@ for (k in 43) {
   main_path = "/Volumes/EyeTrackUAV2/RAW_DATA/RAW_DATA_EyeTracker_CoordSystem"
   setwd(main_path)
   event_folders = list.dirs('.', recursive = F); #event (43) folders
+  event_folders = event_folders[2:length(event_folders)]
   for (i in 1:length(event_folders)) {
     ext1 = event_folders[i]
     event_path = paste(getwd(), substr(ext1, 2, nchar(ext1)), sep = "")
@@ -73,6 +74,7 @@ for (k in 43) {
         #Get to the right folder of 30 csvs
         setwd("/Volumes/EyeTrackUAV2/FIXATIONS")
         event_folders_fix = list.dirs('.', recursive = F); #event (43) folders
+        event_folders_fix = event_folders_fix[2:length(event_folders_fix)]
         ext_fix1 = event_folders_fix[i]
         ext_fix1 = substr(ext_fix1, 2, nchar(ext_fix1))
         ext_fix2 = paste(ext_fix1,"_FV", sep = "")
@@ -83,13 +85,14 @@ for (k in 43) {
         #Choose the respective folder that matches the subject from the algorithm 
         eye_data_fix = read.csv(file_list_fix[l], header = FALSE)
         fix_count = length(eye_data[,1])
-        fix_dur_avg = mean(eye_data[,6])
+        fix_dur_avg = mean(na.omit(eye_data[,6]))
         ground_data = c(fix_count, fix_dur_avg)
         
         #Saccade
         #Get to the right folder of 30 csvs
         setwd("/Volumes/EyeTrackUAV2/SACCADES")
         event_folders_sac = list.dirs('.', recursive = F); #event (43) folders
+        event_folders_sac = event_folders_sac[2:length(event_folders_sac)]
         ext_sac1 = event_folders_sac[i]
         ext_sac1 = substr(ext_sac1, 2, nchar(ext_sac1))
         ext_sac2 = paste(ext_sac1,"_FV", sep = "")
@@ -100,7 +103,7 @@ for (k in 43) {
         #Choose the respective folder that matches the subject from the algorithm 
         eye_data_sac = read.csv(file_list_sac[l], header = FALSE)
         sac_count = length(eye_data_sac[,1])
-        sac_dur_avg = mean(eye_data_sac[,6])
+        sac_dur_avg = mean(na.omit(eye_data_sac[,6]))
         ground_data = c(ground_data, sac_count, sac_dur_avg)
         
         
