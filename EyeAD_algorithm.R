@@ -82,8 +82,8 @@ for (k in 43) {
         
         #Choose the respective folder that matches the subject from the algorithm 
         eye_data_fix = read.csv(file_list_fix[l], header = FALSE)
-        fix_count = length(eye_data[,1])
-        fix_dur_avg = mean(eye_data[,6], na.rm = T)
+        fix_count = length(eye_data_fix[,1])
+        fix_dur_avg = mean(eye_data_fix[,6], na.rm = T)
         ground_data = c(fix_count, fix_dur_avg)
         
         #Saccade
