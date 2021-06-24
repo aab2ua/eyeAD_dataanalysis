@@ -32,11 +32,12 @@ for (i in 1:length(event_folders)) {
   event_count = event_count + 1
   ext1 = event_folders[i]
   event_path = paste(getwd(), substr(ext1, 2, nchar(ext1)), sep = "")
+  #event_path = paste(event_path,"_FV", sep = "") # uncomment for dominant data
   setwd(event_path)
   
   file_list = list.files(getwd(), pattern="*.csv")
   
-  for (l in seq(1, length(file_list), 2)){
+  for (l in seq(1, length(file_list), 2)){ #iterate through every file for dominant data
     alg_file = file_list[l]
     eye_data = read.csv(alg_file, header = FALSE)
     
