@@ -15,8 +15,9 @@ count_files = 0
 
 #Creating the RMSE function
 RMSE = function(m,o){
-  sum = sum(m[o])
-  sqrt(sum/30)
+  col = m %>% pull(o)
+  avg = mean(col, na.rm = T)
+  sqrt(avg)
 }
 
 event_count = 0
