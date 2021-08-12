@@ -151,7 +151,9 @@ for (i in 1:5) {
     eye_data_fix = read.csv(fix_file, header = FALSE)
     fix_count = length(eye_data_fix[,1])
     fix_dur_avg = mean(eye_data_fix[,6], na.rm = T)
-    ground_data_vector = c(alg_file, fix_count, fix_dur_avg)
+    fix_dur_cum = sum(eye_data_fix[,6])
+    
+    ground_data_vector = c(alg_file, fix_count, fix_dur_avg, fix_dur_cum)
     
     #Saccade
     #Get to the right folder of 30 csvs
@@ -173,7 +175,9 @@ for (i in 1:5) {
     eye_data_sac = read.csv(sac_file, header = FALSE)
     sac_count = length(eye_data_sac[,1])
     sac_dur_avg = mean(eye_data_sac[,6], na.rm = T)
-    ground_data_vector = c(ground_data_vector, sac_count, sac_dur_avg)
+    sac_dur_cum = sum(eye_data_sac[,6])
+    
+    ground_data_vector = c(ground_data_vector, sac_count, sac_dur_avg, sac_dur_cum)
 
   }
   
@@ -212,6 +216,6 @@ names(final_data) <- c("File name",
                        "Gaze sac avg, dur", "Disp sac avg, dur", "Vel sac avg, dur",
                        "Gaze sac avg, cum", "Disp sac avg, cum", "Vel sac avg, cum",
                        "File name", 
-                       "GT fix count", "GT fix avg. dur", "GT sac count", "GT sac avg. dur")
+                       "GT fix count", "GT fix avg. dur", "GT fix avg. cum", "GT sac count", "GT sac avg. dur", "GT sac avg. cum")
   
 write.csv(final_data,"//Users/aartheebaskaran/Desktop/Binocular_data.csv", row.names = FALSE) #change this to your where you want to output the csv with the correct title
