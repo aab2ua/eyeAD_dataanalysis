@@ -56,6 +56,7 @@ for (i in 1:5) {
     fix_count_set_gaze = fix_filtered_gaze[1]
     alg_fix_count_gaze = length(fix_count_set_gaze[,1])
     alg_fix_dur_avg_gaze = mean(fix_filtered_gaze$Duration, na.rm = T)
+    alg_fix_dur_cum_gaze = sum(fix_filtered_gaze$Duration)
     
     # #Getting saccade metrics:
     sac_filtered_gaze = s_gaze%>%
@@ -63,8 +64,9 @@ for (i in 1:5) {
     
     sac_count_set_gaze = sac_filtered_gaze[1]
     alg_sac_count_gaze = length(sac_count_set_gaze[,1])
-    alg_sac_dur_avg_gaze = mean(sac_filtered_gaze$Duration, na.rm = T) / 10
-    
+    alg_sac_dur_avg_gaze = mean(sac_filtered_gaze$Duration, na.rm = T)
+    alg_sac_dur_cum_gaze = sum(sac_filtered_gaze$Duration)
+
     #DISPERSION
     alg_results_dis = gazepath(eye_data, x1 = 8, y1 = 9, d1 = 12, trial = 11, height_mm = screen[1,2],
                                width_mm = screen[2,2], width_px = screen[3,2], height_px = screen[4,2], method = "dispersion",
@@ -78,7 +80,8 @@ for (i in 1:5) {
     fix_count_set_dis = fix_filtered_dis[1]
     alg_fix_count_dis = length(fix_count_set_dis[,1])
     alg_fix_dur_avg_dis = mean(fix_filtered_dis$Duration, na.rm = T)
-    
+    alg_fix_dur_cum_dis = sum(fix_filtered_dis$Duration)
+
     # #Getting saccade metrics:
     sac_filtered_dis = s_dis%>%
       filter(Value == "s")
@@ -86,7 +89,8 @@ for (i in 1:5) {
     sac_count_set_dis = sac_filtered_dis[1]
     alg_sac_count_dis = length(sac_count_set_dis[,1])
     alg_sac_dur_avg_dis = mean(sac_filtered_dis$Duration, na.rm = T) / 10
-    
+    alg_sac_dur_cum_dis = sum(sac_filtered_dis$Duration)
+
     #VELOCITY
     alg_results_vel = gazepath(eye_data, x1 = 8, y1 = 9, d1 = 12, trial = 11, height_mm = screen[1,2],
                                width_mm = screen[2,2], width_px = screen[3,2], height_px = screen[4,2], method = "velocity",
@@ -100,6 +104,7 @@ for (i in 1:5) {
     fix_count_set_vel = fix_filtered_vel[1]
     alg_fix_count_vel = length(fix_count_set_vel[,1])
     alg_fix_dur_avg_vel = mean(fix_filtered_vel$Duration, na.rm = T)
+    alg_fix_dur_cum_vel = sum(fix_filtered_vel$Duration)
     
     # #Getting saccade metrics:
     sac_filtered_vel = s_vel%>%
@@ -108,12 +113,15 @@ for (i in 1:5) {
     sac_count_set_vel = sac_filtered_vel[1]
     alg_sac_count_vel = length(sac_count_set_vel[,1])
     alg_sac_dur_avg_vel = mean(sac_filtered_vel$Duration, na.rm = T)
+    alg_sac_dur_cum_vel = sum(sac_filtered_vel$Duration)
     
     #adding to averaging data set
     alg_data_vector = c(alg_file, alg_fix_count_gaze, alg_fix_count_dis, alg_fix_count_vel,
                  alg_fix_dur_avg_gaze, alg_fix_dur_avg_dis, alg_fix_dur_avg_vel,
+                 alg_fix_dur_cum_gaze, alg_fix_dur_cum_dis, alg_fix_dur_cum_vel
                  alg_sac_count_gaze, alg_sac_count_dis, alg_sac_count_vel,
-                 alg_sac_dur_avg_gaze, alg_sac_dur_avg_dis, alg_sac_dur_avg_vel)
+                 alg_sac_dur_avg_gaze, alg_sac_dur_avg_dis, alg_sac_dur_avg_vel
+                 alg_sac_dur_cum_gaze, alg_sac_dur_cum_dis, alg_sac_dur_cum_vel)
     
     if (l == 1) {
       alg_data = alg_data_vector
@@ -196,10 +204,14 @@ for (i in 1:5) {
   setwd(main_path)
 }
 
-names(final_data) <- c("Gaze fixation count", "Disp. fixation count", "Vel. fixation count",
+names(final_data) <- c("File name", 
+                       "Gaze fixation count", "Disp. fixation count", "Vel. fixation count",
                        "Gaze fix avg. dur", "Disp fix avg. dur", "Vel fix avg. dur",
+                       "Gaze fix avg. cum", "Disp fix avg. cum", "Vel fix avg. cum",
                        "Gaze saccade count", "Disp saccade count", "Vel saccade count",
                        "Gaze sac avg, dur", "Disp sac avg, dur", "Vel sac avg, dur",
+                       "Gaze sac avg, cum", "Disp sac avg, cum", "Vel sac avg, cum",
+                       "File name", 
                        "GT fix count", "GT fix avg. dur", "GT sac count", "GT sac avg. dur")
   
 write.csv(final_data,"//Users/aartheebaskaran/Desktop/Binocular_data.csv", row.names = FALSE) #change this to your where you want to output the csv with the correct title
