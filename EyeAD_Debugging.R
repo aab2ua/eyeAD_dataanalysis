@@ -208,6 +208,8 @@ for (i in 1:5) {
   setwd(main_path)
 }
 
+final_data = data.frame(final_data)
+
 names(final_data) <- c("File name", 
                        "Gaze fixation count", "Disp. fixation count", "Vel. fixation count",
                        "Gaze fix avg. dur", "Disp fix avg. dur", "Vel fix avg. dur",
