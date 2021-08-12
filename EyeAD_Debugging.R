@@ -213,11 +213,11 @@ final_data = data.frame(final_data)
 names(final_data) <- c("File name", 
                        "Gaze fixation count", "Disp. fixation count", "Vel. fixation count",
                        "Gaze fix avg. dur", "Disp fix avg. dur", "Vel fix avg. dur",
-                       "Gaze fix avg. cum", "Disp fix avg. cum", "Vel fix avg. cum",
+                       "Gaze fix cum. dur", "Disp fix cum. dur", "Vel fix cum. dur",
                        "Gaze saccade count", "Disp saccade count", "Vel saccade count",
                        "Gaze sac avg, dur", "Disp sac avg, dur", "Vel sac avg, dur",
-                       "Gaze sac avg, cum", "Disp sac avg, cum", "Vel sac avg, cum",
+                       "Gaze sac cum. dur", "Disp sac cum. dur", "Vel sac cum. dur",
                        "File name", 
-                       "GT fix count", "GT fix avg. dur", "GT fix avg. cum", "GT sac count", "GT sac avg. dur", "GT sac avg. cum")
+                       "GT fix count", "GT fix avg. dur", "GT fix cum. dur", "GT sac count", "GT sac avg. dur", "GT sac cum. dur")
   
 write.csv(final_data,"//Users/aartheebaskaran/Desktop/Binocular_data.csv", row.names = FALSE) #change this to your where you want to output the csv with the correct title
