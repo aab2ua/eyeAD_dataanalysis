@@ -1,5 +1,9 @@
-library(gazepath)
+#Lines to check because of folder locations: line 37, 307
 
+#Lines to check each time before running: lines 47, 269
+
+
+library(gazepath)
 library(dplyr)
 
 
@@ -30,17 +34,17 @@ csv_count = 0
 
 
 
-main_path = "C:/Users/aab2ua/Desktop/RAW_DATA_OrigRes_DomEye" #change when calculating saccade results
+main_path = "C:/Users/aab2ua/Desktop/RAW_DATA_OrigRes_DomEye" #put the folder location of raw data 
 
 setwd(main_path)
 
-event_folders = list.dirs('.', recursive = F) #event (43) folders
+event_folders = list.dirs('.', recursive = F) #category (43) folders
 
 
 
-#change the range (ex:1:5) based on what folders you want to fill in - recommend doing small ranges so program doesn't crash.
+#change the range (ex - 1:5) based on what folders you want to fill in - recommend doing small ranges so program doesn't crash. It is an inclusive range of 1 to 5
 
-for (i in 3:15) { #265 line 
+for (i in 3:15) { #Check line 265 
   
   csv_count = 0
   
@@ -50,7 +54,7 @@ for (i in 3:15) { #265 line
   
   event_path1 = paste(getwd(), substr(ext1, 2, nchar(ext1)), sep = "")
   
-  event_path2 = paste(ext1,"_FV", sep = "") # uncomment for dominant data
+  event_path2 = paste(ext1,"_FV", sep = "") 
   
   event_path2 = substr(event_path2, 2, nchar(event_path2)) 
   
@@ -59,10 +63,10 @@ for (i in 3:15) { #265 line
   setwd(event_path)
   
   
-  
+  #Getting list of 30 subject csvs in a category folder
   file_list = list.files(getwd(), pattern="*.csv")
   
-  for (l in seq(1, 30, 1)){ #iterate through every file for dominant data
+  for (l in seq(1, 30, 1)){ 
     
     setwd(event_path)
     
@@ -80,7 +84,7 @@ for (i in 3:15) { #265 line
     
     
     
-    #GAZEPATH
+    #GAZEPATH ALGORITHM
     
     alg_results_gaze = gazepath(eye_data, x1 = 8, y1 = 9, d1 = 12, trial = 11, height_mm = screen[1,2],
                                 
@@ -92,15 +96,15 @@ for (i in 3:15) { #265 line
     
     
     
-    #if (s_gaze == "There were no fixations or saccades classified, probably data quality of this particpant is very low") { #exclude poor quality data
+    if (s_gaze == "There were no fixations or saccades classified, probably data quality of this particpant is very low") { #exclude poor quality data
     
-    # next
+    next
     
-    #}
+    }
     
     
     
-    #Getting fixation metrics:
+    #Filtering and obtaining the fixation metrics:
     
     fix_filtered_gaze = s_gaze%>%
       
@@ -118,7 +122,7 @@ for (i in 3:15) { #265 line
     
     
     
-    # #Getting saccade metrics:
+    #Filtering and obtaining the saccade metrics:
     
     sac_filtered_gaze = s_gaze%>%
       
@@ -136,7 +140,7 @@ for (i in 3:15) { #265 line
     
     
     
-    #DISPERSION
+    #DISPERSION ALGORITHM
     
     alg_results_dis = gazepath(eye_data, x1 = 8, y1 = 9, d1 = 12, trial = 11, height_mm = screen[1,2],
                                
@@ -148,7 +152,7 @@ for (i in 3:15) { #265 line
     
     
     
-    #Getting fixation metrics:
+    #Filtering and obtaining the fixation metrics:
     
     fix_filtered_dis = s_dis%>%
       
@@ -166,7 +170,7 @@ for (i in 3:15) { #265 line
     
     
     
-    # #Getting saccade metrics:
+    #Filtering and obtaining the saccade metrics:
     
     sac_filtered_dis = s_dis%>%
       
@@ -184,7 +188,7 @@ for (i in 3:15) { #265 line
     
     
     
-    #VELOCITY
+    #VELOCITY ALGORITHM
     
     alg_results_vel = gazepath(eye_data, x1 = 8, y1 = 9, d1 = 12, trial = 11, height_mm = screen[1,2],
                                
@@ -196,7 +200,7 @@ for (i in 3:15) { #265 line
     
     
     
-    #Getting fixation metrics:
+    #Filtering and obtaining the fixation metrics:
     
     fix_filtered_vel = s_vel%>%
       
@@ -214,7 +218,7 @@ for (i in 3:15) { #265 line
     
     
     
-    # #Getting saccade metrics:
+    #Filtering and obtaining the saccade metrics:
     
     sac_filtered_vel = s_vel%>%
       
@@ -232,7 +236,7 @@ for (i in 3:15) { #265 line
     
     
     
-    #adding to averaging data set
+    #adding to alg data set (contains all 3 metrics from all 3 algorithms for all 30 subjects by the end of l for loop)
     
     alg_data_vector = c(alg_file, alg_fix_count_gaze, alg_fix_count_dis, alg_fix_count_vel,
                         
@@ -262,7 +266,7 @@ for (i in 3:15) { #265 line
   
   alg_data = t(alg_data)
   
-  if (i == 3) {
+  if (i == 3) { #change to min of range in i for loop 
     final_data = alg_data
   }
   else {
@@ -300,4 +304,4 @@ names(final_data) <- c("File name",
                     
 setwd("C:/Users/aab2ua/Desktop")
 
-write.csv(final_data,"final_data_Dom_3_15.csv", row.names = FALSE) #change this to your where you want to output the csv wit
+write.csv(final_data,"final_data_Dom_3_15.csv", row.names = FALSE) #change this to your where you want to output the csv with
