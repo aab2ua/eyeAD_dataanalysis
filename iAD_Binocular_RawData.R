@@ -1,4 +1,9 @@
-library(gazepath)
+#Lines that you may need to edit before running regarding folder locations: lines 24, 142, 165 
+
+#Lines you need to check everytime before running: lines 29, 200
+
+#Run once each session 
+library(gazepath) #has code for gazepath algorithms 
 library(dplyr)
 
 #Need to have this in environment before running algorithm
@@ -16,21 +21,20 @@ count_files = 0
 event_count = 0
 csv_count = 0
 
-main_path = "/Volumes/EyeTrackUAV2/RAW_DATA/RAW_DATA_EyeTracker_CoordSystem" #change when calculating saccade results
+main_path = "/Volumes/EyeTrackUAV2/RAW_DATA/RAW_DATA_EyeTracker_CoordSystem" #Change based on where your binocular raw data is located 
 setwd(main_path)
 event_folders = list.dirs('.', recursive = F) #event (43) folders
 
-#change the range (ex:1:5) based on what folders you want to fill in - recommend doing small ranges so program doesn't crash.
+#change the range (ex - 1:5) based on what folders you want to compute - recommend doing small ranges so program doesn't crash. It is inclusive of 1 to 5
 for (i in 1:5) {
   csv_count = 0
   event_count = event_count + 1
   ext1 = event_folders[i]
   event_path = paste(getwd(), substr(ext1, 2, nchar(ext1)), sep = "")
-  #event_path = paste(event_path,"_FV", sep = "") # uncomment for dominant data
   setwd(event_path)
   
   file_list = list.files(getwd(), pattern="*.csv")
-  for (l in seq(1, length(file_list), 2)){ #iterate through every file for dominant data
+  for (l in seq(1, length(file_list), 2)){ 
     setwd(event_path)
     alg_file = file_list[l]
     eye_data = read.csv(alg_file, header = FALSE)
@@ -126,6 +130,7 @@ for (i in 1:5) {
     if (l == 1) {
       alg_data = alg_data_vector
     } 
+    
     else {
       alg_data = cbind(alg_data, alg_data_vector)
     }  
@@ -133,13 +138,13 @@ for (i in 1:5) {
     #Getting the subject's fixation and saccade groundtruth values
     
     #Fixation
-    #Get to the right folder of 30 csvs
-    setwd("/Volumes/EyeTrackUAV2/FIXATIONS")
+    #Getting to the right folder of 30 csvs
+    setwd("/Volumes/EyeTrackUAV2/FIXATIONS") #Change based on where the folder location is 
     event_folders_fix = list.dirs('.', recursive = F)
     ext_fix1 = event_folders_fix[i]
     ext_fix1 = substr(ext_fix1, 2, nchar(ext_fix1))
     ext_fix2 = paste(ext_fix1,"_FV", sep = "")
-    event_path_fix = paste(getwd(), ext_fix1, ext_fix2, "/Binocular", sep = "") #Change Binocular to Dominant when doing Dominant data
+    event_path_fix = paste(getwd(), ext_fix1, ext_fix2, "/Binocular", sep = "") 
     setwd(event_path_fix)
     file_list_fix = list.files(getwd(), pattern="*.csv")
     
@@ -157,17 +162,17 @@ for (i in 1:5) {
     
     #Saccade
     #Get to the right folder of 30 csvs
-    setwd("/Volumes/EyeTrackUAV2/SACCADES")
+    setwd("/Volumes/EyeTrackUAV2/SACCADES") #Change based on where the folder location is 
     event_folders_sac = list.dirs('.', recursive = F)
     ext_sac1 = event_folders_sac[i]
     ext_sac1 = substr(ext_sac1, 2, nchar(ext_sac1))
     ext_sac2 = paste(ext_sac1,"_FV", sep = "")
-    event_path_sac = paste(getwd(), ext_sac1, ext_sac2, "/Binocular", sep = "") #Change Binocular to Dominant when doing Dominant data
+    event_path_sac = paste(getwd(), ext_sac1, ext_sac2, "/Binocular", sep = "") 
     setwd(event_path_sac)
     file_list_sac = list.files(getwd(), pattern="*.csv");
     
     #Choose the respective folder that matches the subject from the algorithm
-    sac_file = file_list_sac[(l+1)/2] # change index to l if dominant data
+    sac_file = file_list_sac[(l+1)/2] 
     if(substr(alg_file,1,length(alg_file)-4) != substr(sac_file,1,length(alg_file)-4)){
       stop(c(alg_file,sac_file))
     }
@@ -187,12 +192,14 @@ for (i in 1:5) {
   }
   else {
     ground_data = cbind(ground_data, ground_data_vector)
-  } 
+  }
+ }
+  
   alg_data = t(alg_data)
   ground_data = t(ground_data)
   full_event_data = cbind(alg_data, ground_data)
   
-  if (l == 1) {
+  if (i == 1) {    #put the minimum of the range for the for loop
     final_data = full_event_data
   }
   else {
