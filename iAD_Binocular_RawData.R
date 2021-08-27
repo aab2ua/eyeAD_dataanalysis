@@ -21,11 +21,13 @@ count_files = 0
 event_count = 0
 csv_count = 0
 
+#Setting initial directory to where raw data is 
 main_path = "/Volumes/EyeTrackUAV2/RAW_DATA/RAW_DATA_EyeTracker_CoordSystem" #Change based on where your binocular raw data is located 
 setwd(main_path)
-event_folders = list.dirs('.', recursive = F) #event (43) folders
+event_folders = list.dirs('.', recursive = F) # category (43) folders
 
 #change the range (ex - 1:5) based on what folders you want to compute - recommend doing small ranges so program doesn't crash. It is inclusive of 1 to 5
+#Start of for loop!
 for (i in 1:5) {
   csv_count = 0
   event_count = event_count + 1
@@ -33,8 +35,9 @@ for (i in 1:5) {
   event_path = paste(getwd(), substr(ext1, 2, nchar(ext1)), sep = "")
   setwd(event_path)
   
+  #Getting the list of 30 csvs in each category folder
   file_list = list.files(getwd(), pattern="*.csv")
-  for (l in seq(1, length(file_list), 2)){ 
+  for (l in seq(1, length(file_list), 2)){  #there are 60 files in the category, each subject has a free viewing and task. We only want to focus on free viewing data
     setwd(event_path)
     alg_file = file_list[l]
     eye_data = read.csv(alg_file, header = FALSE)
@@ -43,7 +46,7 @@ for (i in 1:5) {
       mutate(trial = 1)%>%
       mutate(distance = 1000)
     
-    #GAZEPATH
+    #GAZEPATH ALGORITHM
     alg_results_gaze = gazepath(eye_data, x1 = 8, y1 = 9, d1 = 12, trial = 11, height_mm = screen[1,2],
                                 width_mm = screen[2,2], width_px = screen[3,2], height_px = screen[4,2], method = "gazepath",
                                 samplerate = 1000, thres_dur = 80)
@@ -53,7 +56,7 @@ for (i in 1:5) {
     #  next
     #}
     
-    #Getting fixation metrics:
+    #Filtering and obtaining the fixation metrics:
     fix_filtered_gaze = s_gaze%>%
       filter(Value == "f")
     
@@ -62,7 +65,7 @@ for (i in 1:5) {
     alg_fix_dur_avg_gaze = mean(fix_filtered_gaze$Duration, na.rm = T)
     alg_fix_dur_cum_gaze = sum(fix_filtered_gaze$Duration)
     
-    # #Getting saccade metrics:
+    #Filtering and obtaining the saccade metrics:
     sac_filtered_gaze = s_gaze%>%
       filter(Value == "s")
     
@@ -71,13 +74,13 @@ for (i in 1:5) {
     alg_sac_dur_avg_gaze = mean(sac_filtered_gaze$Duration, na.rm = T)
     alg_sac_dur_cum_gaze = sum(sac_filtered_gaze$Duration)
 
-    #DISPERSION
+    #DISPERSION ALGORITHM
     alg_results_dis = gazepath(eye_data, x1 = 8, y1 = 9, d1 = 12, trial = 11, height_mm = screen[1,2],
                                width_mm = screen[2,2], width_px = screen[3,2], height_px = screen[4,2], method = "dispersion",
                                samplerate = 1000, thres_dur = 80)
     s_dis = summary(alg_results_dis)
     
-    #Getting fixation metrics:
+    #Filtering and obtaining the fixation metrics:
     fix_filtered_dis = s_dis%>%
       filter(Value == "f")
     
@@ -86,7 +89,7 @@ for (i in 1:5) {
     alg_fix_dur_avg_dis = mean(fix_filtered_dis$Duration, na.rm = T)
     alg_fix_dur_cum_dis = sum(fix_filtered_dis$Duration)
 
-    # #Getting saccade metrics:
+    #Filtering and obtaining the saccade metrics:
     sac_filtered_dis = s_dis%>%
       filter(Value == "s")
     
@@ -95,13 +98,13 @@ for (i in 1:5) {
     alg_sac_dur_avg_dis = mean(sac_filtered_dis$Duration, na.rm = T) / 10
     alg_sac_dur_cum_dis = sum(sac_filtered_dis$Duration)
 
-    #VELOCITY
+    #VELOCITY ALGORITHM
     alg_results_vel = gazepath(eye_data, x1 = 8, y1 = 9, d1 = 12, trial = 11, height_mm = screen[1,2],
                                width_mm = screen[2,2], width_px = screen[3,2], height_px = screen[4,2], method = "velocity",
                                samplerate = 1000, thres_dur = 80)
     s_vel = summary(alg_results_vel)
     
-    #Getting fixation metrics:
+    #Filtering and obtaining the fixation metrics:
     fix_filtered_vel = s_vel%>%
       filter(Value == "f")
     
@@ -110,7 +113,7 @@ for (i in 1:5) {
     alg_fix_dur_avg_vel = mean(fix_filtered_vel$Duration, na.rm = T)
     alg_fix_dur_cum_vel = sum(fix_filtered_vel$Duration)
     
-    # #Getting saccade metrics:
+    #Filtering and obtaining the saccade metrics:
     sac_filtered_vel = s_vel%>%
       filter(Value == "s")
     
@@ -119,7 +122,7 @@ for (i in 1:5) {
     alg_sac_dur_avg_vel = mean(sac_filtered_vel$Duration, na.rm = T)
     alg_sac_dur_cum_vel = sum(sac_filtered_vel$Duration)
     
-    #adding to averaging data set
+    #adding to alg data set (will contain metrics for all 30 subjects at the end of l for loop)
     alg_data_vector = c(alg_file, alg_fix_count_gaze, alg_fix_count_dis, alg_fix_count_vel,
                  alg_fix_dur_avg_gaze, alg_fix_dur_avg_dis, alg_fix_dur_avg_vel,
                  alg_fix_dur_cum_gaze, alg_fix_dur_cum_dis, alg_fix_dur_cum_vel
@@ -137,7 +140,7 @@ for (i in 1:5) {
     
     #Getting the subject's fixation and saccade groundtruth values
     
-    #Fixation
+    #FIXATION
     #Getting to the right folder of 30 csvs
     setwd("/Volumes/EyeTrackUAV2/FIXATIONS") #Change based on where the folder location is 
     event_folders_fix = list.dirs('.', recursive = F)
@@ -160,7 +163,7 @@ for (i in 1:5) {
     
     ground_data_vector = c(alg_file, fix_count, fix_dur_avg, fix_dur_cum)
     
-    #Saccade
+    #SACCADE
     #Get to the right folder of 30 csvs
     setwd("/Volumes/EyeTrackUAV2/SACCADES") #Change based on where the folder location is 
     event_folders_sac = list.dirs('.', recursive = F)
@@ -186,7 +189,7 @@ for (i in 1:5) {
 
   }
   
-  #adding to averaging data set
+  #adding to ground data set (will have all ground truth values for all 30 subjects at the end of l for loop) 
   if (l == 1) {
     ground_data = ground_data_vector
   }
@@ -197,7 +200,7 @@ for (i in 1:5) {
   
   alg_data = t(alg_data)
   ground_data = t(ground_data)
-  full_event_data = cbind(alg_data, ground_data)
+  full_event_data = cbind(alg_data, ground_data) #contains all experimental metrics, ground truth values, and file name for every subject in every folder computed
   
   if (i == 1) {    #put the minimum of the range for the for loop
     final_data = full_event_data
